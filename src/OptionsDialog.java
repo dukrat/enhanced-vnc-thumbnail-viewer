@@ -45,7 +45,6 @@ public class OptionsDialog extends JDialog implements ActionListener {
         tabPane.addTab("Proxy", getProxyTab());
         tabPane.addTab("Login", getLoginTab());
         tabPane.addTab("Screen Capture", getScreenCaptureTab());
-        tabPane.addTab("Theme", getThemeTab());
         
         // Button section
         okButton = new JButton("OK");
@@ -184,33 +183,7 @@ public class OptionsDialog extends JDialog implements ActionListener {
         
         return panel;
     }
-    
-    /* *
-     * Added on evnctv 1.4.0
-     */
-    private JPanel getThemeTab() {
-        // Initial components
-        JLabel themeSettingLabel = new JLabel("Your preferred theme for display");
-        themeSettingButton = new JButton("Setting...");
-                
-        themeSettingButton.addActionListener(this);
 
-        // Panel
-        JPanel panel = new JPanel();
-        panel.add(themeSettingLabel);
-        panel.add(themeSettingButton);
-        
-        // Layout
-        panel.setLayout(layout);
-        
-        layout.putConstraint(SpringLayout.WEST, themeSettingLabel, PADDING, SpringLayout.WEST, panel);
-        layout.putConstraint(SpringLayout.NORTH, themeSettingLabel, PADDING + 5, SpringLayout.NORTH, panel);
-        
-        layout.putConstraint(SpringLayout.EAST, themeSettingButton, -PADDING, SpringLayout.EAST, panel);
-        layout.putConstraint(SpringLayout.NORTH, themeSettingButton, PADDING, SpringLayout.NORTH, panel);
-        
-        return panel;
-    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -244,8 +217,6 @@ public class OptionsDialog extends JDialog implements ActionListener {
             new LoginSettingDialog(evnctv);
         } else if (e.getSource() == scSettingButton) {
             new ScreenCaptureSettingDialog(evnctv);
-        }  else if (e.getSource() == themeSettingButton) {
-            new ThemeSettingDialog(evnctv);
         }
     }
 }

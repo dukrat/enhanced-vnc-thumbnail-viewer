@@ -179,9 +179,6 @@ public class FileManager {
                         e.getAttribute("Time", "")));
 
                 System.out.println("Load recent settings list...");
-            } else if (child.equals("Theme")) {
-                ThemeSetting.use(e.getAttribute("Name", "Default"));
-                System.out.println("Load theme settings...");
             }
 
             return true;
@@ -326,11 +323,6 @@ public class FileManager {
         screenCapture.setAttribute("Path", ScreenCaptureSetting.getPath());
         screenCapture.setAttribute("Enable", ScreenCaptureSetting.getIsEnable() ? "1" : "0");
         settings.addChild(screenCapture);
-        
-        // Added on evnctv 1.4.0 - Theme
-        IXMLElement theme = settings.createElement("Theme");
-        theme.setAttribute("Name", ThemeSetting.getName());
-        settings.addChild(theme);
 
         // Recent settings element
         if (RecentSettingsList.getTotalRecents().size() > 0) {

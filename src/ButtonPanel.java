@@ -95,7 +95,7 @@ class ButtonPanel extends Panel implements ActionListener {
     removeButton.addActionListener(this);
     compnameLabel = new Label("      "+ compname);
     compnameLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
-    compnameLabel.setForeground(Color.decode(ThemeSetting.get("main.viewer.font-color")));
+    compnameLabel.setForeground(Color.black);
     add(compnameLabel); 
   }
 
