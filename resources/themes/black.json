@@ -1,9 +1,0 @@
-{
-    "name": "Black",
-    "main": {
-        "viewer": {
-            "background-color": "#000000",
-            "font-color": "#FFFFFF"
-        }
-    }
-}
