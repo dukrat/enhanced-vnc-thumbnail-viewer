@@ -170,7 +170,7 @@ class RfbProto {
   OutputStream os;
   SessionRecorder rec;
   boolean inNormalProtocol = false;
-  VncViewer viewer;
+  CConnViewer viewer;
 
   // Java on UNIX does not call keyPressed() on some keys, for example
   // swedish keys To prevent our workaround to produce duplicate
@@ -256,7 +256,7 @@ class RfbProto {
   //
   // Modified on Enhanced VNC Thumbnail Viewer 1.0
   //
-  RfbProto(String h, int p, VncViewer v) throws IOException {
+  RfbProto(String h, int p, CConnViewer v) throws IOException {
     viewer = v;
     host = h;
     port = p;
@@ -279,7 +279,8 @@ class RfbProto {
 	Class factoryClass = Class.forName(viewer.socketFactory);
 	SocketFactory factory = (SocketFactory)factoryClass.newInstance();
 	if (viewer.inAnApplet)
-	  sock = factory.createSocket(host, port, viewer);
+//	  sock = factory.createSocket(host, port, viewer);
+    sock = factory.createSocket(host, port, viewer.mainArgs);
 	else
 	  sock = factory.createSocket(host, port, viewer.mainArgs);
       } catch(Exception e) {
@@ -754,12 +755,12 @@ System.out.println("gen=" + gen + ", mod=" + mod + ", pub=" + pub + ", key=" + k
   //
 
   void writeClientInit() throws IOException {
-    if (viewer.options.shareDesktop) {
-      os.write(1);
-    } else {
-      os.write(0);
-    }
-    viewer.options.disableShareDesktop();
+//    if (viewer.options.shareDesktop) {
+//      os.write(1);
+//    } else {
+//      os.write(0);
+//    }
+//    viewer.options.disableShareDesktop();
   }
 
 
@@ -1178,10 +1179,10 @@ System.out.println("gen=" + gen + ", mod=" + mod + ", pub=" + pub + ", key=" + k
 
     int mask2 = 2;
     int mask3 = 4;
-    if (viewer.options.reverseMouseButtons2And3) {
-      mask2 = 4;
-      mask3 = 2;
-    }
+//    if (viewer.options.reverseMouseButtons2And3) {
+//      mask2 = 4;
+//      mask3 = 2;
+//    }
 
     // Note: For some reason, AWT does not set BUTTON1_MASK on left
     // button presses. Here we think that it was the left button if

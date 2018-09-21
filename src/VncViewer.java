@@ -53,13 +53,13 @@ public class VncViewer extends java.applet.Applet
   //
 
   public static void main(String[] argv) {
-    VncViewer v = new VncViewer();
+    CConnViewer v = new CConnViewer(argv[0], null);
     v.mainArgs = argv;
     v.inAnApplet = false;
     v.inSeparateFrame = true;
 
-    v.init();
-    v.start();
+//    v.init();
+//    v.start();
   }
 
   String[] mainArgs;
@@ -126,10 +126,10 @@ public class VncViewer extends java.applet.Applet
 
     recordingSync = new Object();
 
-    options = new OptionsFrame(this);
-    clipboard = new ClipboardFrame(this);
-    if (RecordingFrame.checkSecurity())
-      rec = new RecordingFrame(this);
+//    options = new OptionsFrame(this);
+//    clipboard = new ClipboardFrame(this);
+//    if (RecordingFrame.checkSecurity())
+//      rec = new RecordingFrame(this);
 
     sessionFileName = null;
     recordingActive = false;
@@ -162,7 +162,7 @@ public class VncViewer extends java.applet.Applet
     gbc.fill = GridBagConstraints.BOTH; // AS & DJC
 
     if (showControls) {
-      buttonPanel = new ButtonPanel(this, compname);
+//      buttonPanel = new ButtonPanel(this, compname);
       gridbag.setConstraints(buttonPanel, gbc);
       vncContainer.add(buttonPanel);
     }
@@ -294,8 +294,8 @@ public class VncViewer extends java.applet.Applet
     }
 
     // If we failed to create VncCanvas2D, use old VncCanvas.
-    if (vc == null)
-      vc = new VncCanvas(this, maxWidth, maxHeight);
+//    if (vc == null)
+//      vc = new VncCanvas(this, maxWidth, maxHeight);
   }
 
 
@@ -336,7 +336,7 @@ public class VncViewer extends java.applet.Applet
     showConnectionStatus("Connecting to " + host + ", port " + port + "...");
 
     //rfb = new RfbProto(host, port, this);
-    rfb = new RfbProto(host, port, this);
+//    rfb = new RfbProto(host, port, this);
     showConnectionStatus("Connected to server");
 
     rfb.readVersionMsg();
@@ -447,7 +447,7 @@ public class VncViewer extends java.applet.Applet
   {
     showConnectionStatus(null);
 
-    AuthPanel authPanel = new AuthPanel(this);
+//    AuthPanel authPanel = new AuthPanel(this);
 
     GridBagConstraints gbc = new GridBagConstraints();
     gbc.gridwidth = GridBagConstraints.REMAINDER;
@@ -456,20 +456,21 @@ public class VncViewer extends java.applet.Applet
     gbc.weighty = 1.0;
     gbc.ipadx = 100;
     gbc.ipady = 50;
-    gridbag.setConstraints(authPanel, gbc);
-    vncContainer.add(authPanel);
+//    gridbag.setConstraints(authPanel, gbc);
+//    vncContainer.add(authPanel);
 
     if (inSeparateFrame) {
       vncFrame.pack();
     } else {
       validate();
     }
+//
+//    authPanel.moveFocusToDefaultField();
+//    String pw = authPanel.getPassword();
+//    vncContainer.remove(authPanel);
 
-    authPanel.moveFocusToDefaultField();
-    String pw = authPanel.getPassword();
-    vncContainer.remove(authPanel);
-
-    return pw;
+//    return pw;
+      return "password";
   }
 
 
@@ -942,7 +943,7 @@ public class VncViewer extends java.applet.Applet
       Panel textPanel = new Panel(new FlowLayout(FlowLayout.CENTER));
       textPanel.add(errLabel);
       gridPanel.add(textPanel);
-      gridPanel.add(new ReloginPanel(this));
+//      gridPanel.add(new ReloginPanel(this));
 
     } else {
 

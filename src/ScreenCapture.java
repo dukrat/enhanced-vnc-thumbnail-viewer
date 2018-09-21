@@ -32,41 +32,41 @@ public class ScreenCapture implements Runnable {
                     // If has viewer(s)
                     if (size > 0) {
                         boolean isClosed = false;
-                        VncViewer v = (VncViewer) viewersList.get(i);
+                        CConnViewer v = (CConnViewer) viewersList.get(i);
 
                         // If viewer has been closed
-                        if (v.rfb.closed()) {
-                            boolean reconnecting = true;
-
-                            // Viewer is reconnecting
-                            while(reconnecting) {
-                                v = viewersList.launchViewerScreenCapture(v.host, v.port, v.passwordParam, v.usernameParam, v.userdomain, v.compname);
-
-                                // Delay waiting for reconnecting
-                                Thread.sleep(3000);
-
-                                reconnecting = (v.rfb == null) ? true : false;        
-                                isClosed = true;
-                            }
-                        } else {
-                        }
+//                        if (v.rfb.closed()) {
+//                            boolean reconnecting = true;
+//
+//                            // Viewer is reconnecting
+//                            while(reconnecting) {
+//                                v = viewersList.launchViewerScreenCapture(v.host, v.port, v.passwordParam, v.usernameParam, v.userdomain, v.compname);
+//
+//                                // Delay waiting for reconnecting
+//                                Thread.sleep(3000);
+//
+//                                reconnecting = (v.rfb == null) ? true : false;
+//                                isClosed = true;
+//                            }
+//                        } else {
+//                        }
 
                         // To capture a screen
-                        try {
-                            v.vc.capture();
-
-                            if (isClosed) {
-                                v.disconnect();
-                            }
-
-                            isError = false;
-                            i++;
-                        } catch(Exception e){
-                            if (!isError) {
-                                JOptionPane.showConfirmDialog(evnctv, "Cannot save a screen. Please make sure your path is valid.", "Error", JOptionPane.DEFAULT_OPTION);
-                                isError = true;
-                            }
-                        }
+//                        try {
+//                            v.vc.capture();
+//
+//                            if (isClosed) {
+//                                v.disconnect();
+//                            }
+//
+//                            isError = false;
+//                            i++;
+//                        } catch(Exception e){
+//                            if (!isError) {
+//                                JOptionPane.showConfirmDialog(evnctv, "Cannot save a screen. Please make sure your path is valid.", "Error", JOptionPane.DEFAULT_OPTION);
+//                                isError = true;
+//                            }
+//                        }
 
                         // Next viewer
                         i = (i == size) ? 0 : i;

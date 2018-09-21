@@ -40,7 +40,7 @@ import javax.imageio.ImageIO;
 class VncCanvas extends Canvas
         implements KeyListener, MouseListener, MouseMotionListener {
 
-    VncViewer viewer;
+    CConnViewer viewer;
     RfbProto rfb;
     ColorModel cm8, cm24;
     Color[] colors;
@@ -79,15 +79,15 @@ class VncCanvas extends Canvas
     //
     // The constructors.
     //
-    public VncCanvas(VncViewer v, int maxWidth_, int maxHeight_)
+    public VncCanvas(CConnViewer v, int maxWidth_, int maxHeight_)
             throws IOException {
 
         viewer = v;
         maxWidth = maxWidth_;
         maxHeight = maxHeight_;
 
-        rfb = viewer.rfb;
-        scalingFactor = viewer.options.scalingFactor;
+//        rfb = viewer.rfb;
+//        scalingFactor = viewer.options.scalingFactor;
 
         tightInflaters = new Inflater[4];
 
@@ -102,16 +102,16 @@ class VncCanvas extends Canvas
         setPixelFormat();
 
         inputEnabled = false;
-        if (!viewer.options.viewOnly) {
-            enableInput(true);
-        }
+//        if (!viewer.options.viewOnly) {
+//            enableInput(true);
+//        }
 
         // Keyboard listener is enabled even in view-only mode, to catch
         // 'r' or 'R' key presses used to request screen update.
         addKeyListener(this);
     }
 
-    public VncCanvas(VncViewer v) throws IOException {
+    public VncCanvas(CConnViewer v) throws IOException {
         this(v, 0, 0);
     }
 
@@ -221,29 +221,29 @@ class VncCanvas extends Canvas
             inputEnabled = true;
             addMouseListener(this);
             addMouseMotionListener(this);
-            if (viewer.showControls) {
-                viewer.buttonPanel.enableRemoteAccessControls(true);
-            }
+//            if (viewer.showControls) {
+//                viewer.buttonPanel.enableRemoteAccessControls(true);
+//            }
             createSoftCursor();	// scaled cursor
         } else if (!enable && inputEnabled) {
             inputEnabled = false;
             removeMouseListener(this);
             removeMouseMotionListener(this);
-            if (viewer.showControls) {
-                viewer.buttonPanel.enableRemoteAccessControls(false);
-            }
+//            if (viewer.showControls) {
+//                viewer.buttonPanel.enableRemoteAccessControls(false);
+//            }
             createSoftCursor();	// non-scaled cursor
         }
     }
 
     public void setPixelFormat() throws IOException {
-        if (viewer.options.eightBitColors) {
-            rfb.writeSetPixelFormat(8, 8, false, true, 7, 7, 3, 0, 3, 6);
-            bytesPixel = 1;
-        } else {
-            rfb.writeSetPixelFormat(32, 24, false, true, 255, 255, 255, 16, 8, 0);
-            bytesPixel = 4;
-        }
+//        if (viewer.options.eightBitColors) {
+//            rfb.writeSetPixelFormat(8, 8, false, true, 7, 7, 3, 0, 3, 6);
+//            bytesPixel = 1;
+//        } else {
+//            rfb.writeSetPixelFormat(32, 24, false, true, 255, 255, 255, 16, 8, 0);
+//            bytesPixel = 4;
+//        }
         updateFramebufferSize();
     }
 
@@ -272,12 +272,12 @@ class VncCanvas extends Canvas
         // its geometry should be changed. It's not necessary to replace
         // existing image if only pixel format should be changed.
         if (memImage == null) {
-            memImage = viewer.vncContainer.createImage(fbWidth, fbHeight);
+//            memImage = viewer.vncContainer.createImage(fbWidth, fbHeight);
             memGraphics = memImage.getGraphics();
         } else if (memImage.getWidth(null) != fbWidth
                 || memImage.getHeight(null) != fbHeight) {
             synchronized (memImage) {
-                memImage = viewer.vncContainer.createImage(fbWidth, fbHeight);
+//                memImage = viewer.vncContainer.createImage(fbWidth, fbHeight);
                 memGraphics = memImage.getGraphics();
             }
         }
@@ -312,13 +312,13 @@ class VncCanvas extends Canvas
 
         // Update the size of desktop containers.
         if (viewer.inSeparateFrame) {
-            if (viewer.desktopScrollPane != null) {
-                resizeDesktopFrame();
-            }
+//            if (viewer.desktopScrollPane != null) {
+//                resizeDesktopFrame();
+//            }
         } else {
             setSize(scaledWidth, scaledHeight);
         }
-        viewer.moveFocusToDesktop();
+//        viewer.moveFocusToDesktop();
     }
 
     void resizeDesktopFrame() {
@@ -326,11 +326,11 @@ class VncCanvas extends Canvas
 
         // FIXME: Find a better way to determine correct size of a
         // ScrollPane.  -- const
-        Insets insets = viewer.desktopScrollPane.getInsets();
-        viewer.desktopScrollPane.setSize(scaledWidth
-                + 2 * Math.min(insets.left, insets.right),
-                scaledHeight
-                + 2 * Math.min(insets.top, insets.bottom));
+//        Insets insets = viewer.desktopScrollPane.getInsets();
+//        viewer.desktopScrollPane.setSize(scaledWidth
+//                + 2 * Math.min(insets.left, insets.right),
+//                scaledHeight
+//                + 2 * Math.min(insets.top, insets.bottom));
 
         viewer.vncFrame.pack();
 
@@ -363,7 +363,7 @@ class VncCanvas extends Canvas
             viewer.vncFrame.setSize(newSize);
         }
 
-        viewer.desktopScrollPane.doLayout();
+//        viewer.desktopScrollPane.doLayout();
     }
 
     //
@@ -373,7 +373,7 @@ class VncCanvas extends Canvas
     public void processNormalProtocol() throws Exception {
 
         // Start/stop session recording if necessary.
-        viewer.checkRecordingStatus();
+//        viewer.checkRecordingStatus();
 
         rfb.writeFramebufferUpdateRequest(0, 0, rfb.framebufferWidth,
                 rfb.framebufferHeight, false);
@@ -460,33 +460,33 @@ class VncCanvas extends Canvas
 
                     // Start/stop session recording if necessary. Request full
                     // update if a new session file was opened.
-                    if (viewer.checkRecordingStatus()) {
-                        fullUpdateNeeded = true;
-                    }
+//                    if (viewer.checkRecordingStatus()) {
+//                        fullUpdateNeeded = true;
+//                    }
 
                     // Defer framebuffer update request if necessary. But wake up
                     // immediately on keyboard or mouse event. Also, don't sleep
                     // if there is some data to receive, or if the last update
                     // included a PointerPos message.
-                    if (viewer.deferUpdateRequests > 0
-                            && rfb.is.available() == 0 && !cursorPosReceived) {
-                        synchronized (rfb) {
-                            try {
-                                rfb.wait(viewer.deferUpdateRequests);
-                            } catch (InterruptedException e) {
-                            }
-                        }
-                    }
+//                    if (viewer.deferUpdateRequests > 0
+//                            && rfb.is.available() == 0 && !cursorPosReceived) {
+//                        synchronized (rfb) {
+//                            try {
+//                                rfb.wait(viewer.deferUpdateRequests);
+//                            } catch (InterruptedException e) {
+//                            }
+//                        }
+//                    }
 
                     // Before requesting framebuffer update, check if the pixel
                     // format should be changed. If it should, request full update
                     // instead of an incremental one.
-                    if (viewer.options.eightBitColors != (bytesPixel == 1)) {
-                        setPixelFormat();
-                        fullUpdateNeeded = true;
-                    }
+//                    if (viewer.options.eightBitColors != (bytesPixel == 1)) {
+//                        setPixelFormat();
+//                        fullUpdateNeeded = true;
+//                    }
 
-                    viewer.autoSelectEncodings();
+//                    viewer.autoSelectEncodings();
 
                     rfb.writeFramebufferUpdateRequest(0, 0, rfb.framebufferWidth,
                             rfb.framebufferHeight,
@@ -503,7 +503,7 @@ class VncCanvas extends Canvas
 
                 case RfbProto.ServerCutText:
                     String s = rfb.readServerCutText();
-                    viewer.clipboard.setCutText(s);
+//                    viewer.clipboard.setCutText(s);
                     break;
 
                 default:
@@ -1489,13 +1489,13 @@ class VncCanvas extends Canvas
     void scheduleRepaint(int x, int y, int w, int h) {
         // Request repaint, deferred if necessary.
         if (rfb.framebufferWidth == scaledWidth) {
-            repaint(viewer.deferScreenUpdates, x, y, w, h);
+//            repaint(viewer.deferScreenUpdates, x, y, w, h);
         } else {
             int sx = x * scalingFactor / 100;
             int sy = y * scalingFactor / 100;
             int sw = ((x + w) * scalingFactor + 49) / 100 - sx + 1;
             int sh = ((y + h) * scalingFactor + 49) / 100 - sy + 1;
-            repaint(viewer.deferScreenUpdates, sx, sy, sw, sh);
+//            repaint(viewer.deferScreenUpdates, sx, sy, sw, sh);
         }
     }
 
@@ -1531,54 +1531,54 @@ class VncCanvas extends Canvas
     }
 
     public void processLocalKeyEvent(KeyEvent evt) {
-        if (viewer.rfb != null && rfb.inNormalProtocol) {
-            if (!inputEnabled) {
-                if ((evt.getKeyChar() == 'r' || evt.getKeyChar() == 'R')
-                        && evt.getID() == KeyEvent.KEY_PRESSED) {
-                    // Request screen update.
-                    try {
-                        rfb.writeFramebufferUpdateRequest(0, 0, rfb.framebufferWidth,
-                                rfb.framebufferHeight, false);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } else {
-                // Input enabled.
-                synchronized (rfb) {
-                    try {
-                        rfb.writeKeyEvent(evt);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    rfb.notify();
-                }
-            }
-        }
+//        if (viewer.rfb != null && rfb.inNormalProtocol) {
+//            if (!inputEnabled) {
+//                if ((evt.getKeyChar() == 'r' || evt.getKeyChar() == 'R')
+//                        && evt.getID() == KeyEvent.KEY_PRESSED) {
+//                    // Request screen update.
+//                    try {
+//                        rfb.writeFramebufferUpdateRequest(0, 0, rfb.framebufferWidth,
+//                                rfb.framebufferHeight, false);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            } else {
+//                // Input enabled.
+//                synchronized (rfb) {
+//                    try {
+//                        rfb.writeKeyEvent(evt);
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                    rfb.notify();
+//                }
+//            }
+//        }
         // Don't ever pass keyboard events to AWT for default processing. 
         // Otherwise, pressing Tab would switch focus to ButtonPanel etc.
         evt.consume();
     }
 
     public void processLocalMouseEvent(MouseEvent evt, boolean moved) {
-        if (viewer.rfb != null && rfb.inNormalProtocol) {
-            if (moved) {
-                softCursorMove(evt.getX(), evt.getY());
-            }
-            if (rfb.framebufferWidth != scaledWidth) {
-                int sx = (evt.getX() * 100 + scalingFactor / 2) / scalingFactor;
-                int sy = (evt.getY() * 100 + scalingFactor / 2) / scalingFactor;
-                evt.translatePoint(sx - evt.getX(), sy - evt.getY());
-            }
-            synchronized (rfb) {
-                try {
-                    rfb.writePointerEvent(evt);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                rfb.notify();
-            }
-        }
+//        if (viewer.rfb != null && rfb.inNormalProtocol) {
+//            if (moved) {
+//                softCursorMove(evt.getX(), evt.getY());
+//            }
+//            if (rfb.framebufferWidth != scaledWidth) {
+//                int sx = (evt.getX() * 100 + scalingFactor / 2) / scalingFactor;
+//                int sy = (evt.getY() * 100 + scalingFactor / 2) / scalingFactor;
+//                evt.translatePoint(sx - evt.getX(), sy - evt.getY());
+//            }
+//            synchronized (rfb) {
+//                try {
+//                    rfb.writePointerEvent(evt);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//                rfb.notify();
+//            }
+//        }
     }
 
     //
@@ -1619,18 +1619,18 @@ class VncCanvas extends Canvas
         }
 
         // Ignore cursor shape data if requested by user.
-        if (viewer.options.ignoreCursorUpdates) {
-            int bytesPerRow = (width + 7) / 8;
-            int bytesMaskData = bytesPerRow * height;
-
-            if (encodingType == rfb.EncodingXCursor) {
-                rfb.is.skipBytes(6 + bytesMaskData * 2);
-            } else {
-                // rfb.EncodingRichCursor
-                rfb.is.skipBytes(width * height + bytesMaskData);
-            }
-            return;
-        }
+//        if (viewer.options.ignoreCursorUpdates) {
+//            int bytesPerRow = (width + 7) / 8;
+//            int bytesMaskData = bytesPerRow * height;
+//
+//            if (encodingType == rfb.EncodingXCursor) {
+//                rfb.is.skipBytes(6 + bytesMaskData * 2);
+//            } else {
+//                // rfb.EncodingRichCursor
+//                rfb.is.skipBytes(width * height + bytesMaskData);
+//            }
+//            return;
+//        }
 
         // Decode cursor pixel data.
         softCursorSource = decodeCursorShape(encodingType, width, height);
@@ -1646,8 +1646,8 @@ class VncCanvas extends Canvas
 
         // Show the cursor.
         showSoftCursor = true;
-        repaint(viewer.deferCursorUpdates,
-                cursorX - hotX, cursorY - hotY, cursorWidth, cursorHeight);
+//        repaint(viewer.deferCursorUpdates,
+//                cursorX - hotX, cursorY - hotY, cursorWidth, cursorHeight);
     }
 
     //
@@ -1769,7 +1769,8 @@ class VncCanvas extends Canvas
             return;
         }
 
-        int scaleCursor = viewer.options.scaleCursor;
+//        int scaleCursor = viewer.options.scaleCursor;
+        int scaleCursor = 0;
         if (scaleCursor == 0 || !inputEnabled) {
             scaleCursor = 100;
         }
@@ -1798,7 +1799,7 @@ class VncCanvas extends Canvas
             w = Math.max(w, cursorWidth);
             h = Math.max(h, cursorHeight);
 
-            repaint(viewer.deferCursorUpdates, x, y, w, h);
+//            repaint(viewer.deferCursorUpdates, x, y, w, h);
         }
     }
 
@@ -1810,12 +1811,12 @@ class VncCanvas extends Canvas
         int oldY = cursorY;
         cursorX = x;
         cursorY = y;
-        if (showSoftCursor) {
-            repaint(viewer.deferCursorUpdates,
-                    oldX - hotX, oldY - hotY, cursorWidth, cursorHeight);
-            repaint(viewer.deferCursorUpdates,
-                    cursorX - hotX, cursorY - hotY, cursorWidth, cursorHeight);
-        }
+//        if (showSoftCursor) {
+//            repaint(viewer.deferCursorUpdates,
+//                    oldX - hotX, oldY - hotY, cursorWidth, cursorHeight);
+//            repaint(viewer.deferCursorUpdates,
+//                    cursorX - hotX, cursorY - hotY, cursorWidth, cursorHeight);
+//        }
     }
 
     //
@@ -1827,8 +1828,8 @@ class VncCanvas extends Canvas
             softCursor = null;
             softCursorSource = null;
 
-            repaint(viewer.deferCursorUpdates,
-                    cursorX - hotX, cursorY - hotY, cursorWidth, cursorHeight);
+//            repaint(viewer.deferCursorUpdates,
+//                    cursorX - hotX, cursorY - hotY, cursorWidth, cursorHeight);
         }
     }
 

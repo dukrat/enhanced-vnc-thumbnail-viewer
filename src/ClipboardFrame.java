@@ -31,13 +31,13 @@ class ClipboardFrame extends Frame
   TextArea textArea;
   Button clearButton, closeButton;
   String selection;
-  VncViewer viewer;
+  CConnViewer viewer;
 
   //
   // Constructor.
   //
 
-  ClipboardFrame(VncViewer v) {
+  ClipboardFrame(CConnViewer v) {
     super("TightVNC Clipboard");
 
     viewer = v;
@@ -96,7 +96,7 @@ class ClipboardFrame extends Frame
   public void windowDeactivated (WindowEvent evt) {
     if (selection != null && !selection.equals(textArea.getText())) {
       selection = textArea.getText();
-      viewer.setCutText(selection);
+//      viewer.setCutText(selection);
     }
   }
 

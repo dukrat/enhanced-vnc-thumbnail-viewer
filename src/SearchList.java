@@ -21,9 +21,9 @@ public class SearchList{
         }
         else{
             viewersSearchList.clear();
-            VncViewer v;
+            CConnViewer v;
             for(int i = 0; i < viewersList.size(); i++){
-                v = (VncViewer) viewersList.get(i);
+                v = (CConnViewer) viewersList.get(i);
                 if(v.compname.toLowerCase().contains(searchText.toLowerCase())){
                     viewersSearchList.add(v);
                 }

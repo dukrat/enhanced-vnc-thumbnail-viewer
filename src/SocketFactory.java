@@ -22,6 +22,8 @@
 // standard Socket class by its alternative implementations.
 //
 
+import com.tigervnc.vncviewer.CConn;
+
 import java.applet.*;
 import java.net.*;
 import java.io.*;

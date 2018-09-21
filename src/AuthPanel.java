@@ -34,7 +34,7 @@ class AuthPanel extends Panel implements ActionListener {
   // Constructor.
   //
 
-  public AuthPanel(VncViewer viewer)
+  public AuthPanel(CConnViewer viewer)
   {
     Label titleLabel = new Label("VNC Authentication", Label.CENTER);
     titleLabel.setFont(new Font("Helvetica", Font.BOLD, 18));

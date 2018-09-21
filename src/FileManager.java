@@ -263,7 +263,7 @@ public class FileManager {
             System.out.println("LOAD Host: " + host + " Port: " + port + " SecType: " + secType);
             if (success) {
                 if (viewerLists.getViewer(host, port) == null) {
-                    VncViewer v = viewerLists.launchViewer(host, port, password, username, userdomain, compname); // Modified on Enhanced VNC Thumbnail Viewer 1.0 ***
+                    CConnViewer v = viewerLists.launchViewer(host, port, password, username, userdomain, compname); // Modified on Enhanced VNC Thumbnail Viewer 1.0 ***
                     //VncViewer v = launchViewer(host, port, password, username, userdomain);
                     //v.setCompName(compname);
                     //v.setComment(comment);
@@ -351,7 +351,7 @@ public class FileManager {
             // Connection child
             ListIterator l = viewersList.listIterator();
             while (l.hasNext()) {
-                VncViewer v = (VncViewer) l.next();
+                CConnViewer v = (CConnViewer) l.next();
                 String host = v.host;
                 String port = Integer.toString(v.port);
                 String password = v.passwordParam;

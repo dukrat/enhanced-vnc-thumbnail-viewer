@@ -46,7 +46,7 @@ import java.io.*;
 
 class ButtonPanel extends Panel implements ActionListener {
 
-  VncViewer viewer;
+  CConnViewer viewer;
   Button disconnectButton;
   Button optionsButton;
   Button recordButton;
@@ -59,7 +59,7 @@ class ButtonPanel extends Panel implements ActionListener {
   Button removeButton;
 
   //ButtonPanel(VncViewer v) {
-  ButtonPanel(VncViewer v, String compname) {
+  ButtonPanel(CConnViewer v, String compname) {
     viewer = v;
 
     setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
@@ -74,11 +74,11 @@ class ButtonPanel extends Panel implements ActionListener {
     clipboardButton.setEnabled(false);
     add(clipboardButton);
     clipboardButton.addActionListener(this);
-    if (viewer.rec != null) {
-      recordButton = new Button("Record");
-      add(recordButton);
-      recordButton.addActionListener(this);
-    }
+//    if (viewer.rec != null) {
+//      recordButton = new Button("Record");
+//      add(recordButton);
+//      recordButton.addActionListener(this);
+//    }
     ctrlAltDelButton = new Button("Send Ctrl-Alt-Del");
     ctrlAltDelButton.setEnabled(false);
     add(ctrlAltDelButton);
@@ -144,7 +144,7 @@ class ButtonPanel extends Panel implements ActionListener {
 
   public void actionPerformed(ActionEvent evt) {
 
-    viewer.moveFocusToDesktop();
+//    viewer.moveFocusToDesktop();
 
     // Cancelled on evnctv 1.001
     /*if (evt.getSource() == disconnectButton) {
@@ -152,39 +152,39 @@ class ButtonPanel extends Panel implements ActionListener {
 
     } else*/ 
     
-    if (evt.getSource() == optionsButton) {
-      viewer.options.setVisible(!viewer.options.isVisible());
-
-    } else if (evt.getSource() == recordButton) {
-      viewer.rec.setVisible(!viewer.rec.isVisible());
-
-    } else if (evt.getSource() == clipboardButton) {
-      viewer.clipboard.setVisible(!viewer.clipboard.isVisible());
-
-    } else if (evt.getSource() == ctrlAltDelButton) {
-      try {
-        final int modifiers = InputEvent.CTRL_MASK | InputEvent.ALT_MASK;
-
-        KeyEvent ctrlAltDelEvent =
-          new KeyEvent(this, KeyEvent.KEY_PRESSED, 0, modifiers, 127);
-        viewer.rfb.writeKeyEvent(ctrlAltDelEvent);
-
-        ctrlAltDelEvent =
-          new KeyEvent(this, KeyEvent.KEY_RELEASED, 0, modifiers, 127);
-        viewer.rfb.writeKeyEvent(ctrlAltDelEvent);
-
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-    } else if (evt.getSource() == refreshButton) {
-      try {
-	RfbProto rfb = viewer.rfb;
-	rfb.writeFramebufferUpdateRequest(0, 0, rfb.framebufferWidth,
-					  rfb.framebufferHeight, false);
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-    }
+//    if (evt.getSource() == optionsButton) {
+//      viewer.options.setVisible(!viewer.options.isVisible());
+//
+//    } else if (evt.getSource() == recordButton) {
+//      viewer.rec.setVisible(!viewer.rec.isVisible());
+//
+//    } else if (evt.getSource() == clipboardButton) {
+//      viewer.clipboard.setVisible(!viewer.clipboard.isVisible());
+//
+//    } else if (evt.getSource() == ctrlAltDelButton) {
+//      try {
+//        final int modifiers = InputEvent.CTRL_MASK | InputEvent.ALT_MASK;
+//
+//        KeyEvent ctrlAltDelEvent =
+//          new KeyEvent(this, KeyEvent.KEY_PRESSED, 0, modifiers, 127);
+//        viewer.rfb.writeKeyEvent(ctrlAltDelEvent);
+//
+//        ctrlAltDelEvent =
+//          new KeyEvent(this, KeyEvent.KEY_RELEASED, 0, modifiers, 127);
+//        viewer.rfb.writeKeyEvent(ctrlAltDelEvent);
+//
+//      } catch (IOException e) {
+//        e.printStackTrace();
+//      }
+//    } else if (evt.getSource() == refreshButton) {
+//      try {
+//	RfbProto rfb = viewer.rfb;
+//	rfb.writeFramebufferUpdateRequest(0, 0, rfb.framebufferWidth,
+//					  rfb.framebufferHeight, false);
+//      } catch (IOException e) {
+//        e.printStackTrace();
+//      }
+//    }
   }
 }
 

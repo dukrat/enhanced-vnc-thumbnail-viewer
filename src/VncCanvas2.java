@@ -26,12 +26,12 @@ import java.io.*;
 
 class VncCanvas2 extends VncCanvas {
 
-  public VncCanvas2(VncViewer v) throws IOException {
+  public VncCanvas2(CConnViewer v) throws IOException {
     super(v);
     disableFocusTraversalKeys();
   }
 
-  public VncCanvas2(VncViewer v, int maxWidth_, int maxHeight_)
+  public VncCanvas2(CConnViewer v, int maxWidth_, int maxHeight_)
     throws IOException {
 
     super(v, maxWidth_, maxHeight_);

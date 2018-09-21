@@ -28,6 +28,8 @@
  *  - New methods -> launchViewer()
  */
 
+import com.tigervnc.rfb.CSecurity;
+
 import java.awt.*;
 import java.util.*;
 
@@ -54,10 +56,10 @@ public class VncViewersList extends Vector {
   //
   // If a host is loaded in first time, this method will be called
   //
-  public VncViewer launchViewer(String host, int port, String password, String user, String userdomain, String compname) {
-    VncViewer v = launchViewer(tnViewer, host, port, password, user, userdomain, compname);
+  public CConnViewer launchViewer(String host, int port, String password, String user, String userdomain, String compname) {
+    CConnViewer v = launchViewer(tnViewer, host, port, password, user, userdomain, compname);
     add(v);
-    tnViewer.addViewer(v);
+    tnViewer.addViewer(v.desktop);
 
     return v;
   }
@@ -66,29 +68,29 @@ public class VncViewersList extends Vector {
   // Added on evnctv 1.000
   //    When want to reconnect, this will be called
   //
-  public VncViewer launchViewerReconnect(String host, int port, String password, String user, String userdomain, String compname) {
-    VncViewer v = launchViewer(tnViewer, host, port, password, user, userdomain, compname);
-    tnViewer.addViewer(v);
+  public CConnViewer launchViewerReconnect(String host, int port, String password, String user, String userdomain, String compname) {
+    CConnViewer v = launchViewer(tnViewer, host, port, password, user, userdomain, compname);
+    tnViewer.addViewer(v.desktop);
     
     return v;
   }
   
-  public VncViewer launchViewerReconnect(String host, int port, String password, String user, String userdomain, String compname, int order) {
-    VncViewer v = launchViewer(tnViewer, host, port, password, user, userdomain, compname);
-    tnViewer.addViewer(v, order);
+  public CConnViewer launchViewerReconnect(String host, int port, String password, String user, String userdomain, String compname, int order) {
+    CConnViewer v = launchViewer(tnViewer, host, port, password, user, userdomain, compname);
+    tnViewer.addViewer(v.desktop, order);
     
     return v;
   }
   
   /* Added on evnctv 1.003 */
-  public VncViewer launchViewerScreenCapture(String host, int port, String password, String user, String userdomain, String compname) {
-    VncViewer v = launchViewer(tnViewer, host, port, password, user, userdomain, compname);
+  public CConnViewer launchViewerScreenCapture(String host, int port, String password, String user, String userdomain, String compname) {
+    CConnViewer v = launchViewer(tnViewer, host, port, password, user, userdomain, compname);
     tnViewer.addViewerScreenCapture(v);
     
     return v;
   }
   
-  public static VncViewer launchViewer(EnhancedVncThumbnailViewer tnviewer, String host, int port, String password, String user, String userdomain, String compname) {
+  public static CConnViewer launchViewer(EnhancedVncThumbnailViewer tnviewer, String host, int port, String password, String user, String userdomain, String compname) {
     String args[] = new String[4];
     args[0] = "host";
     args[1] = host;
@@ -133,29 +135,38 @@ public class VncViewersList extends Vector {
 
     // launch a new viewer
     System.out.println("Launch Host: " + host + ":" + port);
-    VncViewer v = new VncViewer();
+    TigerPassword dlg = new TigerPassword(password);
+    CConnViewer v = new CConnViewer(host+":"+port, null);
+    v.csecurity.upg = dlg;
     v.mainArgs = args;
     v.inAnApplet = false;
     v.inSeparateFrame = false;
-    v.showControls = true;
-    v.showOfflineDesktop = true;
+//    v.showControls = true;
+//    v.showOfflineDesktop = true;
     v.vncFrame = tnviewer;
-    v.init();
-    v.options.viewOnly = true;
-    v.options.autoScale = true; // false, because ThumbnailViewer maintains the scaling
-    v.options.scalingFactor = 10;
-    v.addContainerListener(tnviewer);
+//    v.init();
+//    v.options.viewOnly = true;
+//    v.options.autoScale = true; // false, because ThumbnailViewer maintains the scaling
+//    v.options.scalingFactor = 10;
+//    v.addContainerListener(tnviewer);
     v.start();
+    while (v.desktop == null){
+      try {
+        Thread.sleep(500);
+      } catch(InterruptedException e) {
+        continue;
+      }
+    }
     
     return v;
   }
 
-  public VncViewer getViewer(String hostname, int port) {
-    VncViewer v = null;
+  public CConnViewer getViewer(String hostname, int port) {
+    CConnViewer v = null;
 
     ListIterator l = listIterator();
     while(l.hasNext()) {
-      v = (VncViewer)l.next();
+      v = (CConnViewer)l.next();
       if(v.host == hostname && v.port == port) {
         return v;
       }
@@ -164,13 +175,13 @@ public class VncViewersList extends Vector {
     return null;
   }
 
-  public VncViewer getViewer(Container c) {
-    VncViewer v = null;
+  public CConnViewer getViewer(Container c) {
+    CConnViewer v = null;
 
     ListIterator l = listIterator();
     while(l.hasNext()) {
-      v = (VncViewer)l.next();
-      if(c.isAncestorOf(v)) {
+      v = (CConnViewer)l.next();
+      if(c.isAncestorOf(v.desktop)) {
         return v;
       }
     }
@@ -178,13 +189,13 @@ public class VncViewersList extends Vector {
     return null;
   }
 
-  public VncViewer getViewer(Button b) {
-    VncViewer v;
+  public CConnViewer getViewer(Button b) {
+    CConnViewer v;
 
     ListIterator l = listIterator();
     while(l.hasNext()) {
-      v = (VncViewer)l.next();
-      if(v.getParent().isAncestorOf(b)) {
+      v = (CConnViewer)l.next();
+      if(v.desktop.getParent().isAncestorOf(b)) {
         return v;
       }
     }

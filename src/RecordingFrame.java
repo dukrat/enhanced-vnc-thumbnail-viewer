@@ -37,7 +37,7 @@ class RecordingFrame extends Frame
   Label statusLabel;
 
   Button recordButton, nextButton, closeButton;
-  VncViewer viewer;
+  CConnViewer viewer;
 
   //
   // Check if current security manager allows to create a
@@ -64,7 +64,7 @@ class RecordingFrame extends Frame
   // Constructor.
   //
 
-  RecordingFrame(VncViewer v) {
+  RecordingFrame(CConnViewer v) {
     super("TightVNC Session Recording");
 
     viewer = v;
@@ -243,7 +243,7 @@ class RecordingFrame extends Frame
 
     recording = true;
 
-    viewer.setRecordingStatus(fnameField.getText());
+//    viewer.setRecordingStatus(fnameField.getText());
   }
 
   //
@@ -258,7 +258,7 @@ class RecordingFrame extends Frame
 
     recording = false;
 
-    viewer.setRecordingStatus(null);
+//    viewer.setRecordingStatus(null);
   }
 
   //

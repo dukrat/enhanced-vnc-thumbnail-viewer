@@ -35,12 +35,12 @@ import java.applet.*;
 class ReloginPanel extends Panel implements ActionListener {
   Button reloginButton;
   Button closeButton;
-  VncViewer viewer;
+  CConnViewer viewer;
 
   //
   // Constructor.
   //
-  public ReloginPanel(VncViewer v) {
+  public ReloginPanel(CConnViewer v) {
     viewer = v;
     setLayout(new FlowLayout(FlowLayout.CENTER));
     reloginButton = new Button("Login again");

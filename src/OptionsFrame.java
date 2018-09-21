@@ -80,7 +80,7 @@ class OptionsFrame extends JFrame
   JLabel[] labels = new JLabel[names.length];
   Choice[] choices = new Choice[names.length];
   JButton closeButton;
-  VncViewer viewer;
+  CConnViewer viewer;
 
 
   //
@@ -109,7 +109,7 @@ class OptionsFrame extends JFrame
   // arrays.
   //
 
-  OptionsFrame(VncViewer v) {
+  OptionsFrame(CConnViewer v) {
     super("TightVNC Options");
 
     viewer = v;
@@ -163,7 +163,8 @@ class OptionsFrame extends JFrame
     // But let them be overridden by parameters
 
     for (int i = 0; i < names.length; i++) {
-      String s = viewer.readParameter(names[i], false);
+//      String s = viewer.readParameter(names[i], false);
+      String s = null;
       if (s != null) {
 	for (int j = 0; j < values[i].length; j++) {
 	  if (s.equalsIgnoreCase(values[i][j])) {
@@ -177,7 +178,8 @@ class OptionsFrame extends JFrame
 
     autoScale = false;
     scalingFactor = 100;
-    String s = viewer.readParameter("Scaling Factor", false);
+//    String s = viewer.readParameter("Scaling Factor", false);
+      String s = null;
     if (s != null) {
       if (s.equalsIgnoreCase("Auto")) {
 	autoScale = true;
@@ -295,7 +297,7 @@ class OptionsFrame extends JFrame
 	choices[cursorUpdatesIndex].getSelectedItem().equals("Ignore");
     }
 
-    viewer.setEncodings();
+//    viewer.setEncodings();
   }
 
   //
@@ -329,8 +331,8 @@ class OptionsFrame extends JFrame
 
     viewOnly 
       = choices[viewOnlyIndex].getSelectedItem().equals("Yes");
-    if (viewer.vc != null)
-      viewer.vc.enableInput(!viewOnly);
+//    if (viewer.vc != null)
+//      viewer.vc.enableInput(!viewOnly);
 
     shareDesktop
       = choices[shareDesktopIndex].getSelectedItem().equals("Yes");
@@ -354,8 +356,8 @@ class OptionsFrame extends JFrame
       labels[scaleCursorIndex].setEnabled(false);
       choices[scaleCursorIndex].setEnabled(false);
     }
-    if (viewer.vc != null)
-      viewer.vc.createSoftCursor(); // update cursor scaling
+//    if (viewer.vc != null)
+//      viewer.vc.createSoftCursor(); // update cursor scaling
   }
 
 
