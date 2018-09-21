@@ -48,30 +48,26 @@ Hello World.
 
 ## How to compile
 
-change directory to `src` and run with command:
-
 for linux
 ```
-javac -cp .:../lib/* *.java
-jar -cvfe ../EnhancedVncThumbnailViewer.jar EnhancedVncThumbnailViewer *.class
+javac -cp "src:lib/json-20080701" -d build src/*.java
+cp -r lib/json-20080701/* build
+jar cvfme EnhancedVncThumbnailViewer.jar src/manifest.mf EnhancedVncThumbnailViewer -C build .
+rm -rf build
 ```
 
-for windows
+for windows (powershell)
 ```
-javac -cp .;../lib/* *.java
-jar -cvfe ../EnhancedVncThumbnailViewer.jar EnhancedVncThumbnailViewer *.class
+javac -cp "src;lib/json-20080701" -d build src/*.java
+cp -r lib/json-20080701/* build
+jar cvfme EnhancedVncThumbnailViewer.jar src/manifest.mf EnhancedVncThumbnailViewer -C build .
+rm -r build
 ```
 
 ## How to run
 
-change directory to `parent` and run with command:
-
-for linux
+for linux and windows
 ```
-java -cp EnhancedVncThumbnailViewer.jar:lib/* EnhancedVncThumbnailViewer
+java -jar EnhancedVncThumbnailViewer.jar
 ```
 
-for windows
-```
-java -cp EnhancedVncThumbnailViewer.jar;lib/* EnhancedVncThumbnailViewer
-```

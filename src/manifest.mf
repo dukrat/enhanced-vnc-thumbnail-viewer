@@ -1,1 +1,1 @@
-Main-Class: VncThumbnailViewer
+Class-Path: .;lib/json-20070701
