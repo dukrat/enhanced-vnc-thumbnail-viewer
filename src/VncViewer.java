@@ -414,7 +414,7 @@ public class VncViewer extends java.applet.Applet
     if (connStatusLabel == null) {
       connStatusLabel = new Label("Status: " + msg);
       connStatusLabel.setFont(new Font("Helvetica", Font.PLAIN, 12));
-      connStatusLabel.setForeground(Color.black);
+      connStatusLabel.setForeground(Color.decode(ThemeSetting.get("main.viewer.font-color")));
     } else {
       connStatusLabel.setText("Status: " + msg);
     }

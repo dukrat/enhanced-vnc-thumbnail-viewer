@@ -191,7 +191,7 @@ public class EnhancedVncThumbnailViewer extends Frame
         naviPanel = new JPanel(new GridLayout(1, 2));
         viewerPanel = new JPanel(new GridLayout(2, 2));
         naviPanel.setBackground(Color.gray);
-        viewerPanel.setBackground(Color.white);
+        viewerPanel.setBackground(Color.decode(ThemeSetting.get("main.viewer.background-color")));
         add(naviPanel, BorderLayout.NORTH);
         add(viewerPanel, BorderLayout.CENTER);
 
@@ -260,7 +260,7 @@ public class EnhancedVncThumbnailViewer extends Frame
         soloViewer = new Frame();
         soloViewer.setIconImage(Toolkit.getDefaultToolkit().getImage("icon.png")); // Added on evnctv 1.001
         soloViewer.setSize(GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds().getSize());
-        soloViewer.setBackground(Color.white);
+        soloViewer.setBackground(Color.decode(ThemeSetting.get("main.viewer.background-color")));
         soloViewer.addWindowListener(this);
         soloViewer.addComponentListener(this);
         soloViewer.validate();
@@ -925,8 +925,8 @@ public class EnhancedVncThumbnailViewer extends Frame
     }
     
     public void setGuiTheme() {
-        viewerPanel.setBackground(Color.white);
-        soloViewer.setBackground(Color.white);
+        viewerPanel.setBackground(Color.decode(ThemeSetting.get("main.viewer.background-color")));
+        soloViewer.setBackground(Color.decode(ThemeSetting.get("main.viewer.background-color")));
     }
     
     public VncViewersList getViewerList() {
