@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" build-on-make="true" name="tiger-vnc-thumbnail-viewer:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/tiger_vnc_thumbnail_viewer_jar</output-path>
-    <root id="archive" name="tiger-vnc-thumbnail-viewer.jar">
-      <element id="module-output" name="tiger-vnc-thumbnail-viewer" />
-    </root>
-  </artifact>
-</component>
