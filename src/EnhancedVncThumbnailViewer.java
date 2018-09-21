@@ -402,9 +402,9 @@ public class EnhancedVncThumbnailViewer extends Frame
         this.validate();
         soloViewer.validate();
 
-        if (!v.rfb.closed()) {
-            v.vc.enableInput(true);
-        }
+        // if (!v.rfb.closed()) {
+        //     v.vc.enableInput(true);
+        // }
         updateCanvasScaling(v, getWidthNoInsets(soloViewer), getHeightNoInsets(soloViewer));
     }
 

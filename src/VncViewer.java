@@ -41,6 +41,8 @@ import java.awt.event.*;
 import java.io.*;
 import java.net.*;
 
+import com.tigervnc.vncviewer.CConn;
+
 public class VncViewer extends java.applet.Applet
   implements java.lang.Runnable, WindowListener {
 
@@ -64,7 +66,7 @@ public class VncViewer extends java.applet.Applet
 
   String[] mainArgs;
 
-  RfbProto rfb;
+  CConn rfb;
   Thread rfbThread;
 
   Frame vncFrame;
@@ -204,7 +206,7 @@ public class VncViewer extends java.applet.Applet
 
 	// Finally, add our ScrollPane to the Frame window.
 	vncFrame.add(desktopScrollPane);
-	vncFrame.setTitle(rfb.desktopName);
+	// vncFrame.setTitle(rfb.desktopName);
 	vncFrame.pack();
 	vc.resizeDesktopFrame();
 
@@ -238,9 +240,10 @@ public class VncViewer extends java.applet.Applet
 	  vc.enableInput(false);
 	}
 	if (inSeparateFrame) {
-	  vncFrame.setTitle(rfb.desktopName + " [disconnected]");
-	}
-	if (rfb != null && !rfb.closed())
+	  // vncFrame.setTitle(rfb.desktopName + " [disconnected]");
+  }
+  if (rfb != null)
+	// if (rfb != null && !rfb.closed())
 	  rfb.close();
 	if (showControls && buttonPanel != null) {
 	  buttonPanel.disableButtonsOnDisconnect();
@@ -336,62 +339,64 @@ public class VncViewer extends java.applet.Applet
     showConnectionStatus("Connecting to " + host + ", port " + port + "...");
 
     //rfb = new RfbProto(host, port, this);
-    rfb = new RfbProto(host, port, this);
+    //rfb = new RfbProto(host, port, this);
+    rfb = new CConn(host + "::" + port, null);
     showConnectionStatus("Connected to server");
 
-    rfb.readVersionMsg();
-    showConnectionStatus("RFB server supports protocol version " +
-			 rfb.serverMajor + "." + rfb.serverMinor);
+    rfb.processMsg();
+  //  rfb.readVersionMsg();
+  //   showConnectionStatus("RFB server supports protocol version " +
+	// 		 rfb.serverMajor + "." + rfb.serverMinor);
 
-    rfb.writeVersionMsg();
-    showConnectionStatus("Using RFB protocol version " +
-			 rfb.clientMajor + "." + rfb.clientMinor);
+  //   rfb.writeVersionMsg();
+  //   showConnectionStatus("Using RFB protocol version " +
+	// 		 rfb.clientMajor + "." + rfb.clientMinor);
 
-    int secType = rfb.negotiateSecurity();
-    int authType;
-    if (secType == RfbProto.SecTypeTight) {
-      showConnectionStatus("Enabling TightVNC protocol extensions");
-      rfb.initCapabilities();
-      rfb.setupTunneling();
-      authType = rfb.negotiateAuthenticationTight();
-    } else {
-      authType = secType;
-    }
+    // int secType = rfb.negotiateSecurity();
+    // int authType;
+    // if (secType == RfbProto.SecTypeTight) {
+    //   showConnectionStatus("Enabling TightVNC protocol extensions");
+    //   rfb.initCapabilities();
+    //   rfb.setupTunneling();
+    //   authType = rfb.negotiateAuthenticationTight();
+    // } else {
+    //   authType = secType;
+    // }
 
-    switch (authType) {
-    case RfbProto.AuthNone:
-      showConnectionStatus("No authentication needed");
-      rfb.authenticateNone();
-      break;
-    case RfbProto.AuthVNC:
-      showConnectionStatus("Performing standard VNC authentication");
-      String pw = passwordParam;
-      if(pw == null) {
-        pw = askPassword();
-      }
-      if(rfb.serverMinor == 4 && rfb.clientMinor == 4) { // MS-Logon
-        showConnectionStatus("Performing VNC authentication... with Ultr@VNC MS-Logon I"); // MS-Logon
-        String us = usernameParam; // MS-Logon
-        if(us == null) { // MS-Logon
-          throw new Exception("Username not specified, could not complete logon"); // MS-Logon
-        } // MS-Logon
-        rfb.authenticateMSLogonI(pw, us); // MS-Logon
-      } // MS-Logon
-      else // MS-Logon
-        rfb.authenticateVNC(pw);
+    // switch (authType) {
+    // case RfbProto.AuthNone:
+    //   showConnectionStatus("No authentication needed");
+    //   rfb.authenticateNone();
+    //   break;
+    // case RfbProto.AuthVNC:
+    //   showConnectionStatus("Performing standard VNC authentication");
+    //   String pw = passwordParam;
+    //   if(pw == null) {
+    //     pw = askPassword();
+    //   }
+    //   if(rfb.serverMinor == 4 && rfb.clientMinor == 4) { // MS-Logon
+    //     showConnectionStatus("Performing VNC authentication... with Ultr@VNC MS-Logon I"); // MS-Logon
+    //     String us = usernameParam; // MS-Logon
+    //     if(us == null) { // MS-Logon
+    //       throw new Exception("Username not specified, could not complete logon"); // MS-Logon
+    //     } // MS-Logon
+    //     rfb.authenticateMSLogonI(pw, us); // MS-Logon
+    //   } // MS-Logon
+    //   else // MS-Logon
+    //     rfb.authenticateVNC(pw);
 
-      break;
-    case RfbProto.AuthMSL: // MS-Logon
-      showConnectionStatus("Performing MS-Logon authentication"); // MS-Logon
-      if (passwordParam != null && usernameParam != null) { // MS-Logon
-        rfb.authenticateMSLogon(passwordParam, usernameParam); // MS-Logon
-      } else { // MS-Logon
-        throw new Exception("Username or Password not specified, could not complete MS-Logon"); // MS-Logon
-      } // MS-Logon
-      break; // MS-Logon
-    default:
-      throw new Exception("Unknown authentication scheme " + authType);
-    }
+    //   break;
+    // case RfbProto.AuthMSL: // MS-Logon
+    //   showConnectionStatus("Performing MS-Logon authentication"); // MS-Logon
+    //   if (passwordParam != null && usernameParam != null) { // MS-Logon
+    //     rfb.authenticateMSLogon(passwordParam, usernameParam); // MS-Logon
+    //   } else { // MS-Logon
+    //     throw new Exception("Username or Password not specified, could not complete MS-Logon"); // MS-Logon
+    //   } // MS-Logon
+    //   break; // MS-Logon
+    // default:
+    //   throw new Exception("Unknown authentication scheme " + authType);
+    // }
   }
 
 
@@ -479,12 +484,12 @@ public class VncViewer extends java.applet.Applet
 
   void doProtocolInitialisation() throws IOException
   {
-    rfb.writeClientInit();
-    rfb.readServerInit();
+    // rfb.writeClientInit();
+    // rfb.readServerInit();
 
-    System.out.println("Desktop name is " + rfb.desktopName);
-    System.out.println("Desktop size is " + rfb.framebufferWidth + " x " +
-		       rfb.framebufferHeight);
+    // System.out.println("Desktop name is " + rfb.desktopName);
+    // System.out.println("Desktop size is " + rfb.framebufferWidth + " x " +
+		//        rfb.framebufferHeight);
 
     setEncodings();
 
@@ -503,28 +508,29 @@ public class VncViewer extends java.applet.Applet
   void autoSelectEncodings() { setEncodings(true); }
 
   void setEncodings(boolean autoSelectOnly) {
-    if (options == null || rfb == null || !rfb.inNormalProtocol)
+    if (options == null || rfb == null)
+    // if (options == null || rfb == null || !rfb.inNormalProtocol)
       return;
 
     int preferredEncoding = options.preferredEncoding;
     if (preferredEncoding == -1) {
-      long kbitsPerSecond = rfb.kbitsPerSecond();
+      // long kbitsPerSecond = rfb.kbitsPerSecond();
       if (nEncodingsSaved < 1) {
         // Choose Tight or ZRLE encoding for the very first update.
         System.out.println("Using Tight/ZRLE encodings");
         preferredEncoding = RfbProto.EncodingTight;
-      } else if (kbitsPerSecond > 2000 &&
-                 encodingsSaved[0] != RfbProto.EncodingHextile) {
-        // Switch to Hextile if the connection speed is above 2Mbps.
-        System.out.println("Throughput " + kbitsPerSecond +
-                           " kbit/s - changing to Hextile encoding");
-        preferredEncoding = RfbProto.EncodingHextile;
-      } else if (kbitsPerSecond < 1000 &&
-                 encodingsSaved[0] != RfbProto.EncodingTight) {
-        // Switch to Tight/ZRLE if the connection speed is below 1Mbps.
-        System.out.println("Throughput " + kbitsPerSecond +
-                           " kbit/s - changing to Tight/ZRLE encodings");
-        preferredEncoding = RfbProto.EncodingTight;
+      // } else if (kbitsPerSecond > 2000 &&
+      //            encodingsSaved[0] != RfbProto.EncodingHextile) {
+      //   // Switch to Hextile if the connection speed is above 2Mbps.
+      //   System.out.println("Throughput " + kbitsPerSecond +
+      //                      " kbit/s - changing to Hextile encoding");
+      //   preferredEncoding = RfbProto.EncodingHextile;
+      // } else if (kbitsPerSecond < 1000 &&
+      //            encodingsSaved[0] != RfbProto.EncodingTight) {
+      //   // Switch to Tight/ZRLE if the connection speed is below 1Mbps.
+      //   System.out.println("Throughput " + kbitsPerSecond +
+      //                      " kbit/s - changing to Tight/ZRLE encodings");
+      //   preferredEncoding = RfbProto.EncodingTight;
       } else {
         // Don't change the encoder.
         if (autoSelectOnly)
@@ -597,7 +603,7 @@ public class VncViewer extends java.applet.Applet
 
     if (encodingsWereChanged) {
       try {
-        rfb.writeSetEncodings(encodings, nEncodings);
+        // rfb.writeSetEncodings(encodings, nEncodings);
         if (vc != null) {
           vc.softCursorFree();
         }
@@ -616,8 +622,9 @@ public class VncViewer extends java.applet.Applet
 
   void setCutText(String text) {
     try {
-      if (rfb != null && rfb.inNormalProtocol) {
-	rfb.writeClientCutText(text);
+      if (rfb != null) {
+      // if (rfb != null && rfb.inNormalProtocol) {
+	// rfb.writeClientCutText(text);
       }
     } catch (Exception e) {
       e.printStackTrace();
@@ -677,11 +684,12 @@ public class VncViewer extends java.applet.Applet
 	options.choices[options.eightBitColorsIndex].setEnabled(false);
 	options.setColorFormat();
       } else {
-	rfb.closeSession();
+  // rfb.closeSession();
+  rfb.close();
       }
 
       System.out.println("Recording the session in " + sessionFileName);
-      rfb.startSession(sessionFileName);
+      // rfb.startSession(sessionFileName);
       recordingActive = true;
     }
   }
@@ -701,7 +709,8 @@ public class VncViewer extends java.applet.Applet
 	options.choices[options.eightBitColorsIndex].setEnabled(true);
 	options.setColorFormat();
 
-	rfb.closeSession();
+  // rfb.closeSession();
+  rfb.close();
 	System.out.println("Session recording stopped.");
       }
       sessionFileName = null;
@@ -860,7 +869,8 @@ public class VncViewer extends java.applet.Applet
   synchronized public void disconnect() {
     System.out.println("Disconnect on "+ compname);
 
-    if (rfb != null && !rfb.closed())
+    if (rfb != null)
+    // if (rfb != null && !rfb.closed())
       rfb.close();
     options.dispose();
     clipboard.dispose();
@@ -899,8 +909,8 @@ public class VncViewer extends java.applet.Applet
   }
 
   synchronized public void fatalError(String str, Exception e) {
- 
-    if (rfb != null && rfb.closed()) {
+    if (rfb != null) {
+    // if (rfb != null && rfb.closed()) {
       // Not necessary to show error message if the error was caused
       // by I/O problems after the rfb.close() method call.
       System.out.println("RFB thread finished");
@@ -981,7 +991,8 @@ public class VncViewer extends java.applet.Applet
     clipboard.dispose();
     if (rec != null)
       rec.dispose();
-    if (rfb != null && !rfb.closed())
+    if (rfb != null)
+    // if (rfb != null && !rfb.closed())
       rfb.close();
     if (inSeparateFrame)
       vncFrame.dispose();

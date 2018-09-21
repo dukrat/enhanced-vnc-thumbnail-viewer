@@ -167,20 +167,20 @@ class ButtonPanel extends Panel implements ActionListener {
 
         KeyEvent ctrlAltDelEvent =
           new KeyEvent(this, KeyEvent.KEY_PRESSED, 0, modifiers, 127);
-        viewer.rfb.writeKeyEvent(ctrlAltDelEvent);
+        // viewer.rfb.writeKeyEvent(ctrlAltDelEvent);
 
         ctrlAltDelEvent =
           new KeyEvent(this, KeyEvent.KEY_RELEASED, 0, modifiers, 127);
-        viewer.rfb.writeKeyEvent(ctrlAltDelEvent);
+        // viewer.rfb.writeKeyEvent(ctrlAltDelEvent);
 
       } catch (IOException e) {
         e.printStackTrace();
       }
     } else if (evt.getSource() == refreshButton) {
       try {
-	RfbProto rfb = viewer.rfb;
-	rfb.writeFramebufferUpdateRequest(0, 0, rfb.framebufferWidth,
-					  rfb.framebufferHeight, false);
+	CConn rfb = viewer.rfb;
+	// rfb.writeFramebufferUpdateRequest(0, 0, rfb.framebufferWidth,
+	// 				  rfb.framebufferHeight, false);
       } catch (IOException e) {
         e.printStackTrace();
       }
