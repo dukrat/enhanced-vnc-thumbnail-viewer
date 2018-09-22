@@ -89,11 +89,15 @@ public class VncViewersList extends Vector {
   }
   
   public static VncViewer launchViewer(EnhancedVncThumbnailViewer tnviewer, String host, int port, String password, String user, String userdomain, String compname) {
-    String args[] = new String[4];
+    String args[] = new String[6];
     args[0] = "host";
     args[1] = host;
     args[2] = "port";
     args[3] = Integer.toString(port);
+
+    int sleepTime = 250 * tnviewer.pagination.thumbsnailPerPage;
+    args[4] = "sleepTime";
+    args[5] = Integer.toString(sleepTime);
 
     if(password != null && password.length() != 0) {
       int newlen = args.length + 2;

@@ -138,7 +138,7 @@ public class EnhancedVncThumbnailViewer extends Frame
     // Added on evnctv 1.000
     private LoginDialog loginDialog;
     private SearchList searchList;
-    private Pagination pagination;
+    public Pagination pagination;
     private JButton nextButton, previousButton, searchButton, cancelSearchButton;
     private JPanel naviPanel, viewerPanel, naviCenterPanel, naviRightPanel;
     private MenuItem aboutMenuItem;
@@ -305,11 +305,19 @@ public class EnhancedVncThumbnailViewer extends Frame
      * Modified on evnctv 1.000, 1.002
      */
     void addViewer(VncViewer v) {
-        addViewerToPanel(v, -1);
+        EventQueue.invokeLater(new Runnable() {
+          public void run() { 
+            addViewerToPanel(v, -1);
+          }
+        });
     }
 
     void addViewer(VncViewer v, int order) {
-        addViewerToPanel(v, order);
+        EventQueue.invokeLater(new Runnable() {
+          public void run() {
+            addViewerToPanel(v, order);
+          }
+        });
     }
     
     /* *
@@ -320,7 +328,7 @@ public class EnhancedVncThumbnailViewer extends Frame
         // Initial var r to choose a size for viewer 
         int r;
         if (pagination.isLimited()) {
-            r = (int) Math.sqrt(Pagination.thumbsnailPerPage - 1) + 1;
+            r = (int) Math.sqrt(pagination.thumbsnailPerPage - 1) + 1;
         } else {
             if (isSearch) {
                 r = (int) Math.sqrt(viewersSearchList.size() - 1) + 1;
@@ -335,7 +343,7 @@ public class EnhancedVncThumbnailViewer extends Frame
             resizeThumbnails();
         }
 
-        if (viewerPanel.getComponentCount() < Pagination.thumbsnailPerPage) {
+        if (viewerPanel.getComponentCount() < pagination.thumbsnailPerPage) {
             // -1 for no order
             if (order == -1) {
                 viewerPanel.add(v);
@@ -368,7 +376,7 @@ public class EnhancedVncThumbnailViewer extends Frame
 
         int r;
         if (pagination.isLimited()) {
-            r = (int) Math.sqrt(Pagination.thumbsnailPerPage - 1) + 1;
+            r = (int) Math.sqrt(pagination.thumbsnailPerPage - 1) + 1;
         } else {
             if (isSearch) {
                 r = (int) Math.sqrt(viewersSearchList.size() - 1) + 1;
@@ -500,6 +508,12 @@ public class EnhancedVncThumbnailViewer extends Frame
                 } else {
                     FileManager.loadFile(dir + file, "", this);
                 }
+
+        EventQueue.invokeLater(new Runnable() {
+          public void run() {
+          pagination.next();
+          showPreviousNextPage(pagination.previous());
+        }});
             }
         }
     }
@@ -890,7 +904,7 @@ public class EnhancedVncThumbnailViewer extends Frame
      * Added on evnctv 1.001
      *  - To show viewers when next/previous page is clicked
      */
-    private void showPreviousNextPage(Vector viewers) {
+    public void showPreviousNextPage(Vector viewers) {
         clearViewersOnPage();
 
         VncViewer v;
@@ -903,6 +917,7 @@ public class EnhancedVncThumbnailViewer extends Frame
 
         enableNaviButton();
     }
+
 
     /* *
      * Added on evnctv 1.001
@@ -923,7 +938,7 @@ public class EnhancedVncThumbnailViewer extends Frame
 
         enableNaviButton();
     }
-    
+
     public void setGuiTheme() {
         viewerPanel.setBackground(Color.decode(ThemeSetting.get("main.viewer.background-color")));
         soloViewer.setBackground(Color.decode(ThemeSetting.get("main.viewer.background-color")));

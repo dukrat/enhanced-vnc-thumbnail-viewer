@@ -13,7 +13,7 @@ import java.util.Vector;
 
 class Pagination {
 
-    static int thumbsnailPerPage = 4;
+    public int thumbsnailPerPage = 23;
     static int presentPage;
     int previousStart, previousEnd, nextStart, nextEnd, presentStart, presentEnd;
     int[] step;

@@ -40,6 +40,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.*;
+import javax.swing.*;
 
 public class VncViewer extends java.applet.Applet
   implements java.lang.Runnable, WindowListener {
@@ -100,6 +101,7 @@ public class VncViewer extends java.applet.Applet
   int deferUpdateRequests;
   String compname; // Added on Enhanced VNC Thumbnail Viewer 1.0 ***
   String userdomain = "";
+  int sleepTime;
 
   // Reference to this applet for inter-applet communication.
   public static java.applet.Applet refApplet;
@@ -179,9 +181,9 @@ public class VncViewer extends java.applet.Applet
 	} catch (Exception e) {
 	  screenSize = new Dimension(0, 0);
 	}
-	createCanvas(screenSize.width - 32, screenSize.height - 32);
+        createCanvas(screenSize.width - 32, screenSize.height - 32);
       } else {
-	createCanvas(0, 0);
+        createCanvas(0, 0);
       }
 
       gbc.weightx = 1.0;
@@ -275,9 +277,12 @@ public class VncViewer extends java.applet.Applet
   // Create a VncCanvas instance.
   //
 
-  void createCanvas(int maxWidth, int maxHeight) throws IOException {
+  void createCanvas(int maxWidth, int maxHeight) throws IOException, InterruptedException {
     // Determine if Java 2D API is available and use a special
     // version of VncCanvas if it is present.
+    // Someone who knows java can probably do this better
+    // but that someone isn't me so let's sleep till it is better
+    Thread.sleep(sleepTime);
     vc = null;
     try {
       // This throws ClassNotFoundException if there is no Java 2D API.
@@ -291,6 +296,7 @@ public class VncViewer extends java.applet.Applet
       vc = (VncCanvas)cstr.newInstance(argObjects);
     } catch (Exception e) {
       System.out.println("Warning: Java 2D API is not available");
+      System.out.println(e);
     }
 
     // If we failed to create VncCanvas2D, use old VncCanvas.
@@ -773,6 +779,8 @@ public class VncViewer extends java.applet.Applet
     if (compname == null || compname.equals("")) {
       compname = host+":"+port;
     }
+
+    sleepTime = readIntParameter("sleepTime", 500);
   }
 
   //

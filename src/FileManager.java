@@ -84,12 +84,15 @@ public class FileManager {
                         IXMLElement e = (IXMLElement) enm.nextElement();
                         Enumeration enm2 = e.enumerateChildren();
 
+
                         if (e.getFullName().equalsIgnoreCase("Connections")) {
                             while (enm2.hasMoreElements()) {
                                 IXMLElement e2 = (IXMLElement) enm2.nextElement();
 
                                 if (e2.getFullName().equalsIgnoreCase("Connection")) {
                                     parseConnection(e2, encrypted, encPassword, evnctv.getViewerList());
+
+
                                 } else {
                                     System.out.println("Load: Ignoring " + e2.getFullName());
                                 }
@@ -114,6 +117,7 @@ public class FileManager {
                                 } else {
                                     System.out.println("Load: Ignoring " + e2.getFullName());
                                 }
+
                             }
                         } else if (e.getFullName().equalsIgnoreCase("RecentSettings")) {
                             while (enm2.hasMoreElements()) {
@@ -132,13 +136,14 @@ public class FileManager {
                     }
                 }
 
+
             } else {
                 System.out.println("Malformed file, missing manifest tag.");
                 System.out.println("Found " + root.getFullName());
             }
 
         } catch (Exception e) {
-            System.out.println("Error loading file.\n" + e.getMessage());
+            System.out.println("Error loading file.\n" + e);
         }
     }
 
@@ -261,7 +266,6 @@ public class FileManager {
                     success = false;
                     break;
             }
-
             // Launch the Viewer:
             System.out.println("LOAD Host: " + host + " Port: " + port + " SecType: " + secType);
             if (success) {

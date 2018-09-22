@@ -30,8 +30,14 @@ public class OptionsDialog extends JDialog implements ActionListener {
     private JButton scSettingButton;
     private JCheckBox scStartCaptureCheckbox;
     
+    private JLabel  thumbsnailPerPageLabel;
+    private JTextField thumbsnailPerPageField;
+
+    
     /* Added on evnctv 1.4.0 */
     private JButton themeSettingButton;
+
+    private JButton layoutSettingButton;
     
     public OptionsDialog(EnhancedVncThumbnailViewer tnviewer) {
         super(tnviewer, true);
@@ -46,6 +52,7 @@ public class OptionsDialog extends JDialog implements ActionListener {
         tabPane.addTab("Login", getLoginTab());
         tabPane.addTab("Screen Capture", getScreenCaptureTab());
         tabPane.addTab("Theme", getThemeTab());
+        tabPane.addTab("Layout", getLayoutTab());
         
         // Button section
         okButton = new JButton("OK");
@@ -212,6 +219,28 @@ public class OptionsDialog extends JDialog implements ActionListener {
         return panel;
     }
 
+    private JPanel getLayoutTab() {
+        // Initial components
+        thumbsnailPerPageLabel = new JLabel("Number of hosts per page");
+        thumbsnailPerPageField = new JTextField(evnctv.pagination.thumbsnailPerPage + "", 4);
+
+        // Panel
+        JPanel panel = new JPanel();
+        panel.add(thumbsnailPerPageLabel);
+        panel.add(thumbsnailPerPageField);
+
+        // Layout
+        panel.setLayout(layout);
+
+        layout.putConstraint(SpringLayout.WEST, thumbsnailPerPageLabel, PADDING, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, thumbsnailPerPageLabel, PADDING + 5, SpringLayout.NORTH, panel);
+        layout.putConstraint(SpringLayout.WEST, thumbsnailPerPageField, PADDING + 150, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, thumbsnailPerPageField, PADDING + 3, SpringLayout.NORTH, panel);
+
+        return panel;
+    }
+
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == okButton) {
@@ -231,7 +260,21 @@ public class OptionsDialog extends JDialog implements ActionListener {
                 String msg = scStartCaptureCheckbox.isSelected() ? "Changed to enable capture" : "Changed to disable capture";
                 RecentSettingsList.addRecent(new RecentSetting(msg, "Screen Capture"));
                 System.out.println(msg);
+
+            // layout
+            } else if (Integer.parseInt(thumbsnailPerPageField.getText()) != evnctv.pagination.thumbsnailPerPage) {
+                if (Integer.parseInt(thumbsnailPerPageField.getText()) > evnctv.pagination.viewersList.size()) {
+                    evnctv.pagination.thumbsnailPerPage = evnctv.pagination.viewersList.size();
+                } else {
+                    evnctv.pagination.thumbsnailPerPage = Integer.parseInt(thumbsnailPerPageField.getText());
+                }
+                evnctv.pagination.next();
+                evnctv.showPreviousNextPage(evnctv.pagination.previous());
+                RecentSettingsList.addRecent(new RecentSetting(thumbsnailPerPageField.getText(), "Layout"));
             }
+
+
+            
             
             this.dispose();
         } else if (e.getSource() == cancelButton) {

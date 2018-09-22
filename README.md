@@ -50,7 +50,7 @@ Hello World.
 
 for linux
 ```
-javac -cp "src:lib/json-20080701" -d build src/*.java
+javac -cp "src:lib/json-20080701" -d build src/*.java src/net/n3/nanoxml/*.java
 cp -r lib/json-20080701/* build
 jar cvfme EnhancedVncThumbnailViewer.jar src/manifest.mf EnhancedVncThumbnailViewer -C build .
 rm -rf build
@@ -58,7 +58,7 @@ rm -rf build
 
 for windows (powershell)
 ```
-javac -cp "src;lib/json-20080701" -d build src/*.java
+javac -cp "src;lib/json-20080701" -d build src/*.java src/net/n3/nanoxml/*.java
 cp -r lib/json-20080701/* build
 jar cvfme EnhancedVncThumbnailViewer.jar src/manifest.mf EnhancedVncThumbnailViewer -C build .
 rm -r build

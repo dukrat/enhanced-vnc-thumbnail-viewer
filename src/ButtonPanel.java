@@ -63,6 +63,10 @@ class ButtonPanel extends Panel implements ActionListener {
     viewer = v;
 
     setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
+    compnameLabel = new Label("      "+ compname);
+    compnameLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
+    compnameLabel.setForeground(Color.decode(ThemeSetting.get("main.viewer.font-color")));
+    add(compnameLabel);
     disconnectButton = new Button("Disconnect");
     disconnectButton.setEnabled(true); // Modified on evnctv 1.001
     add(disconnectButton);
@@ -93,10 +97,6 @@ class ButtonPanel extends Panel implements ActionListener {
     removeButton.setEnabled(true);
     //add(removeButton);
     removeButton.addActionListener(this);
-    compnameLabel = new Label("      "+ compname);
-    compnameLabel.setFont(new Font("Helvetica", Font.BOLD, 14));
-    compnameLabel.setForeground(Color.decode(ThemeSetting.get("main.viewer.font-color")));
-    add(compnameLabel); 
   }
 
   //
