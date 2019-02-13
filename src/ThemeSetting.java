@@ -24,8 +24,19 @@ public class ThemeSetting {
      * Set value to use default theme
      */
     public static void useDefault() {
-        name = "default";
-        readFile();
+        String blackThemeJSON = "{"
+                    + "    \"name\": \"Black\","
+                    + "    \"main\": {"
+                    + "        \"viewer\": {"
+                    + "            \"background-color\": \"#000000\","
+                    + "            \"font-color\": \"#FFFFFF\""
+                    + "        }"
+                    + "    }"
+                    + "}";
+        try {
+            settings = new JSONObject(new JSONTokener(blackThemeJSON));
+        } catch (Exception ex) {
+        }
     }
     
     /**
