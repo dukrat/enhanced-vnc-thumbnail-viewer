@@ -328,7 +328,7 @@ public class EnhancedVncThumbnailViewer extends Frame
         // Initial var r to choose a size for viewer 
         int r;
         if (pagination.isLimited()) {
-            r = (int) Math.sqrt(pagination.thumbsnailPerPage - 1) + 1;
+            r = (int) Math.sqrt(LayoutSetting.getThumbsnailPerPage() - 1) + 1;
         } else {
             if (isSearch) {
                 r = (int) Math.sqrt(viewersSearchList.size() - 1) + 1;
@@ -343,7 +343,7 @@ public class EnhancedVncThumbnailViewer extends Frame
             resizeThumbnails();
         }
 
-        if (viewerPanel.getComponentCount() < pagination.thumbsnailPerPage) {
+        if (viewerPanel.getComponentCount() < LayoutSetting.getThumbsnailPerPage()) {
             // -1 for no order
             if (order == -1) {
                 viewerPanel.add(v);
@@ -376,7 +376,7 @@ public class EnhancedVncThumbnailViewer extends Frame
 
         int r;
         if (pagination.isLimited()) {
-            r = (int) Math.sqrt(pagination.thumbsnailPerPage - 1) + 1;
+            r = (int) Math.sqrt(LayoutSetting.getThumbsnailPerPage() - 1) + 1;
         } else {
             if (isSearch) {
                 r = (int) Math.sqrt(viewersSearchList.size() - 1) + 1;

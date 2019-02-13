@@ -780,7 +780,7 @@ public class VncViewer extends java.applet.Applet
       compname = host+":"+port;
     }
 
-    sleepTime = readIntParameter("sleepTime", 500);
+    sleepTime = readIntParameter("sleepTime", 24 * 300);
   }
 
   //

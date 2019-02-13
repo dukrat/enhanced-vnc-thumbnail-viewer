@@ -13,7 +13,6 @@ import java.util.Vector;
 
 class Pagination {
 
-    public int thumbsnailPerPage = 23;
     static int presentPage;
     int previousStart, previousEnd, nextStart, nextEnd, presentStart, presentEnd;
     int[] step;
@@ -72,7 +71,7 @@ class Pagination {
     }
 
     public boolean isLimited() {
-        if (viewersList.size() > thumbsnailPerPage) {
+        if (viewersList.size() > LayoutSetting.getThumbsnailPerPage()) {
             return true;
         } else {
             return false;
@@ -95,18 +94,18 @@ class Pagination {
 
         // initial value of start program to var presentEnd
         if (presentEnd == 0) {
-            if (thumbsnailPerPage > size) {
+            if (LayoutSetting.getThumbsnailPerPage() > size) {
                 presentEnd = size - 1;
             } else {
-                presentEnd = thumbsnailPerPage - 1;
+                presentEnd = LayoutSetting.getThumbsnailPerPage() - 1;
             }
         }
 
-        nextStart = presentStart + thumbsnailPerPage;
-        nextEnd = presentEnd + thumbsnailPerPage;
+        nextStart = presentStart + LayoutSetting.getThumbsnailPerPage();
+        nextEnd = presentEnd + LayoutSetting.getThumbsnailPerPage();
 
         if (nextEnd >= size) {
-            nextStart = size - thumbsnailPerPage;
+            nextStart = size - LayoutSetting.getThumbsnailPerPage();
             nextEnd = size - 1;
         }
         previousStart = presentStart;
@@ -120,12 +119,12 @@ class Pagination {
     // calculate viewvers that is shown on next page
     //
     private void calPrevious() {
-        previousStart = presentStart - thumbsnailPerPage;
-        previousEnd = presentEnd - thumbsnailPerPage;
+        previousStart = presentStart - LayoutSetting.getThumbsnailPerPage();
+        previousEnd = presentEnd - LayoutSetting.getThumbsnailPerPage();
 
         if (previousStart < 0) {
             previousStart = 0;
-            previousEnd = thumbsnailPerPage - 1;
+            previousEnd = LayoutSetting.getThumbsnailPerPage() - 1;
         }
         nextStart = presentStart;
         nextEnd = presentEnd;
@@ -142,10 +141,10 @@ class Pagination {
         nextStart = 0;
 
         int size = viewersList.size();
-        if (thumbsnailPerPage > size) {
+        if (LayoutSetting.getThumbsnailPerPage() > size) {
             nextEnd = size - 1;
         } else {
-            nextEnd = thumbsnailPerPage - 1;
+            nextEnd = LayoutSetting.getThumbsnailPerPage() - 1;
         }
 
         previousStart = presentStart;
@@ -160,7 +159,7 @@ class Pagination {
      * Calculate previous start when back loop
      */
     private void calInitPrevious() {
-        previousStart = viewersList.size() - thumbsnailPerPage;
+        previousStart = viewersList.size() - LayoutSetting.getThumbsnailPerPage();
         previousEnd = viewersList.size() - 1;
         
         nextStart = presentStart;

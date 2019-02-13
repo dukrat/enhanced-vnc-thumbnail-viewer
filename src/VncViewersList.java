@@ -95,7 +95,7 @@ public class VncViewersList extends Vector {
     args[2] = "port";
     args[3] = Integer.toString(port);
 
-    int sleepTime = 250 * tnviewer.pagination.thumbsnailPerPage;
+    int sleepTime = 300 * LayoutSetting.getThumbsnailPerPage();
     args[4] = "sleepTime";
     args[5] = Integer.toString(sleepTime);
 

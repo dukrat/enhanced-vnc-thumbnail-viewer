@@ -222,7 +222,7 @@ public class OptionsDialog extends JDialog implements ActionListener {
     private JPanel getLayoutTab() {
         // Initial components
         thumbsnailPerPageLabel = new JLabel("Number of hosts per page");
-        thumbsnailPerPageField = new JTextField(evnctv.pagination.thumbsnailPerPage + "", 4);
+        thumbsnailPerPageField = new JTextField(LayoutSetting.getThumbsnailPerPage() + "", 24);
 
         // Panel
         JPanel panel = new JPanel();
@@ -262,11 +262,11 @@ public class OptionsDialog extends JDialog implements ActionListener {
                 System.out.println(msg);
 
             // layout
-            } else if (Integer.parseInt(thumbsnailPerPageField.getText()) != evnctv.pagination.thumbsnailPerPage) {
+            } else if (Integer.parseInt(thumbsnailPerPageField.getText()) != LayoutSetting.getThumbsnailPerPage()) {
                 if (Integer.parseInt(thumbsnailPerPageField.getText()) > evnctv.pagination.viewersList.size()) {
-                    evnctv.pagination.thumbsnailPerPage = evnctv.pagination.viewersList.size();
+                    LayoutSetting.setThumbsnailPerPage(evnctv.pagination.viewersList.size());
                 } else {
-                    evnctv.pagination.thumbsnailPerPage = Integer.parseInt(thumbsnailPerPageField.getText());
+                    LayoutSetting.setThumbsnailPerPage(Integer.parseInt(thumbsnailPerPageField.getText()));
                 }
                 evnctv.pagination.next();
                 evnctv.showPreviousNextPage(evnctv.pagination.previous());
