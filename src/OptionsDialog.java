@@ -32,6 +32,8 @@ public class OptionsDialog extends JDialog implements ActionListener {
     
     private JLabel  thumbsnailPerPageLabel;
     private JTextField thumbsnailPerPageField;
+    private JLabel  thumbnailRowCountLabel;
+    private JTextField thumbnailRowCountField;
 
     
     /* Added on evnctv 1.4.0 */
@@ -224,10 +226,16 @@ public class OptionsDialog extends JDialog implements ActionListener {
         thumbsnailPerPageLabel = new JLabel("Number of hosts per page");
         thumbsnailPerPageField = new JTextField(LayoutSetting.getThumbsnailPerPage() + "", 24);
 
+        thumbnailRowCountLabel = new JLabel("Number of rows of hosts");
+        thumbnailRowCountField = new JTextField(LayoutSetting.getThumbnailRowCount() + "", 3);
+
         // Panel
         JPanel panel = new JPanel();
         panel.add(thumbsnailPerPageLabel);
         panel.add(thumbsnailPerPageField);
+        panel.add(thumbnailRowCountLabel);
+        panel.add(thumbnailRowCountField);
+
 
         // Layout
         panel.setLayout(layout);
@@ -236,6 +244,11 @@ public class OptionsDialog extends JDialog implements ActionListener {
         layout.putConstraint(SpringLayout.NORTH, thumbsnailPerPageLabel, PADDING + 5, SpringLayout.NORTH, panel);
         layout.putConstraint(SpringLayout.WEST, thumbsnailPerPageField, PADDING + 150, SpringLayout.WEST, panel);
         layout.putConstraint(SpringLayout.NORTH, thumbsnailPerPageField, PADDING + 3, SpringLayout.NORTH, panel);
+        layout.putConstraint(SpringLayout.WEST, thumbnailRowCountLabel, PADDING, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, thumbnailRowCountLabel, PADDING + 35, SpringLayout.NORTH, panel);
+        layout.putConstraint(SpringLayout.WEST, thumbnailRowCountField, PADDING + 150, SpringLayout.WEST, panel);
+        layout.putConstraint(SpringLayout.NORTH, thumbnailRowCountField, PADDING + 33, SpringLayout.NORTH, panel);
+
 
         return panel;
     }
@@ -262,20 +275,26 @@ public class OptionsDialog extends JDialog implements ActionListener {
                 System.out.println(msg);
 
             // layout
-            } else if (Integer.parseInt(thumbsnailPerPageField.getText()) != LayoutSetting.getThumbsnailPerPage()) {
-                if (Integer.parseInt(thumbsnailPerPageField.getText()) > evnctv.pagination.viewersList.size()) {
-                    LayoutSetting.setThumbsnailPerPage(evnctv.pagination.viewersList.size());
-                } else {
-                    LayoutSetting.setThumbsnailPerPage(Integer.parseInt(thumbsnailPerPageField.getText()));
+            } else if (Integer.parseInt(thumbsnailPerPageField.getText()) != LayoutSetting.getThumbsnailPerPage() || Integer.parseInt(thumbnailRowCountField.getText()) != LayoutSetting.getThumbnailRowCount()) {
+                 if (Integer.parseInt(thumbsnailPerPageField.getText()) != LayoutSetting.getThumbsnailPerPage()) {
+                    if (Integer.parseInt(thumbsnailPerPageField.getText()) > evnctv.pagination.viewersList.size()) {
+                        LayoutSetting.setThumbsnailPerPage(evnctv.pagination.viewersList.size());
+                    } else {
+                        LayoutSetting.setThumbsnailPerPage(Integer.parseInt(thumbsnailPerPageField.getText()));
+                    }
+                    evnctv.pagination.next();
+                    evnctv.showPreviousNextPage(evnctv.pagination.previous());
+                    RecentSettingsList.addRecent(new RecentSetting(thumbsnailPerPageField.getText(), "Layout"));
                 }
-                evnctv.pagination.next();
-                evnctv.showPreviousNextPage(evnctv.pagination.previous());
-                RecentSettingsList.addRecent(new RecentSetting(thumbsnailPerPageField.getText(), "Layout"));
-            }
-
-
-            
-            
+                 if (Integer.parseInt(thumbnailRowCountField.getText()) != LayoutSetting.getThumbnailRowCount()) {
+                    LayoutSetting.setThumbnailRowCount(Integer.parseInt(thumbnailRowCountField.getText()));
+                    ((GridLayout) evnctv.viewerPanel.getLayout()).setRows(LayoutSetting.getThumbnailRowCount());
+                    evnctv.resizeThumbnails();
+                    evnctv.pagination.next();
+                    evnctv.showPreviousNextPage(evnctv.pagination.previous());
+                    RecentSettingsList.addRecent(new RecentSetting(thumbnailRowCountField.getText(), "Layout"));
+                }
+            }    
             this.dispose();
         } else if (e.getSource() == cancelButton) {
             this.dispose();

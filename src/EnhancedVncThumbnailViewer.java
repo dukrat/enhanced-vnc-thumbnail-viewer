@@ -140,7 +140,8 @@ public class EnhancedVncThumbnailViewer extends Frame
     private SearchList searchList;
     public Pagination pagination;
     private JButton nextButton, previousButton, searchButton, cancelSearchButton;
-    private JPanel naviPanel, viewerPanel, naviCenterPanel, naviRightPanel;
+    private JPanel naviPanel, naviCenterPanel, naviRightPanel;
+    public JPanel viewerPanel;
     private MenuItem aboutMenuItem;
     private JTextField searchField;
     private boolean isSearch = false;
@@ -325,18 +326,19 @@ public class EnhancedVncThumbnailViewer extends Frame
      *  - Reduced duplicate codes in addViewer() method
      */
     private void addViewerToPanel(VncViewer v, int order) {
-        // Initial var r to choose a size for viewer 
-        int r;
-        if (pagination.isLimited()) {
-            r = (int) Math.sqrt(LayoutSetting.getThumbsnailPerPage() - 1) + 1;
-        } else {
-            if (isSearch) {
-                r = (int) Math.sqrt(viewersSearchList.size() - 1) + 1;
+        // Initial var r to choose a size for viewer
+        int r=LayoutSetting.getThumbnailRowCount();
+        if (r == 0) {
+            if (pagination.isLimited()) {
+                r = (int) Math.sqrt(LayoutSetting.getThumbsnailPerPage() - 1) + 1;
             } else {
-                r = (int) Math.sqrt(viewersList.size() - 1) + 1;
+                if (isSearch) {
+                    r = (int) Math.sqrt(viewersSearchList.size() - 1) + 1;
+                } else {
+                    r = (int) Math.sqrt(viewersList.size() - 1) + 1;
+                }
             }
         }
-
         if (r != thumbnailRowCount) {
             thumbnailRowCount = r;
             ((GridLayout) viewerPanel.getLayout()).setRows(thumbnailRowCount);
@@ -374,14 +376,16 @@ public class EnhancedVncThumbnailViewer extends Frame
         v.disconnect();
         validate();
 
-        int r;
-        if (pagination.isLimited()) {
-            r = (int) Math.sqrt(LayoutSetting.getThumbsnailPerPage() - 1) + 1;
-        } else {
-            if (isSearch) {
-                r = (int) Math.sqrt(viewersSearchList.size() - 1) + 1;
+        int r=LayoutSetting.getThumbnailRowCount();
+        if (r == 0) {
+            if (pagination.isLimited()) {
+                r = (int) Math.sqrt(LayoutSetting.getThumbsnailPerPage() - 1) + 1;
             } else {
-                r = (int) Math.sqrt(viewersList.size() - 1) + 1;
+                if (isSearch) {
+                    r = (int) Math.sqrt(viewersSearchList.size() - 1) + 1;
+                } else {
+                    r = (int) Math.sqrt(viewersList.size() - 1) + 1;
+                }
             }
         }
 
@@ -453,7 +457,7 @@ public class EnhancedVncThumbnailViewer extends Frame
     }
 
     /* Modified on evnctv 1.000 */
-    void resizeThumbnails() {
+    public void resizeThumbnails() {
         int newWidth = getWidthNoInsets(this) / thumbnailRowCount;
         int newHeight = getHeightNoInsets(this) / thumbnailRowCount;
 
